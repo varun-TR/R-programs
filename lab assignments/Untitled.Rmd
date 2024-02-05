@@ -1,0 +1,169 @@
+---
+title: "Lab-assignment01 | STAT 515 | 002"
+author: "saivarun tanjore raghavendra (G number:  G01475545)"
+date: "2024-01-31"
+output:
+  pdf_document: default
+  word_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax
+for authoring HTML, PDF, and MS Word documents. For more details on
+using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that
+includes both content as well as the output of any embedded R code
+chunks within the document. You can embed an R code chunk like this:
+
+## a) Import the "carseats" dataset, look at the first few rows and inspect the data types of the variables in dataframe.
+
+```{r}
+data = read.csv("/Users/trsaivarun/Desktop/R programs/lab assignments/carseats(1).csv")
+```
+
+```{r}
+head(data)
+```
+
+```{r}
+str(data)
+```
+
+## b) Change the variables "ShelveLoc, urban, US" into a factor variables.
+
+```{r}
+data$ShelveLoc = factor(data$ShelveLoc)
+str(data)
+```
+
+```{r}
+data$US = factor(data$US)
+str(data)
+```
+
+```{r}
+data$Urban = factor(data$Urban)
+str(data)
+```
+
+## c) create a new variable called "profit" which stands for "Income - Advertising"
+
+```{r}
+data$profit = data$Income - data$Advertising
+data$profit
+head(data)
+```
+
+## d) Check for missing data. If you have missing data remove the corresponding rows from the dataset.
+
+#Here removing missing values
+
+```{r}
+table(is.na(data))
+data=na.omit(data) #deleted the null values here
+head(data)
+```
+
+## e) How many "Good" shelving locations are there in the dataset?
+
+```{r}
+data1=subset(data,data$ShelveLoc == "Good")
+head(data1)
+nrow(data1)
+```
+
+## f) How many stores are inside the USA? create a separate data frame containing all stores from USA.Name the data set as "stores_USA"
+
+```{r}
+stores_USA = subset(data, data$US == "Yes")
+head(stores_USA)
+```
+
+```{r}
+nrow(stores_USA)
+```
+
+## g) create another data set called "HighUrban_USSales" using 'stores_USA' data set. Where, sales are greater than 7 thousand and stores are located in Urban areas.
+
+```{r}
+HighUrban_USSales = subset(stores_USA, Sales>7 & Urban == "Yes")
+head(HighUrban_USSales)
+```
+
+## h) Remove "US" and "Urban" columns from the "HighUrban_USSales" dataset.
+
+```{r}
+HighUrban_USSales2 = HighUrban_USSales[,-c(10,11)]
+head(HighUrban_USSales2)
+```
+
+## i) For one the above subset, write to a new CSV file
+
+```{r}
+write.csv(data,'/Users/trsaivarun/Desktop/R programs/lab assignments/carseats_pure.csv', row.names = F)
+
+```
+
+Q2) See the following code of a function and explain what it does.
+Suggest a suitable name for the function and rename. Demonstrate how the
+function works when you have numerical data and character data.
+function1 \<- function(x) { if (length(x) \<= 1) return(NULL)
+x[-length(x)] }
+
+A)  The following function takes "x" as parameter and then it checks for
+    its length, and if the length is less than or equal to 1 then it
+    returns NULL value. Or else, it removes that last character from the
+    variable and returns the remaining part of it.
+
+```{r}
+cutter <- function(x) {
+if (length(x) <= 1) return(NULL)
+x[-length(x)]
+}
+
+digits = c(1,2,3,4,5)
+letters = c("Benz","Toyota","BMW")
+
+res1 = cutter(digits)
+cat(res1)
+
+
+res2 = cutter(letters)
+cat(res2)
+
+```
+Q3) Write a function to compute the sample variance of a numerical vector. Use the equation
+of the variance to write the function.
+```{r}
+
+sample_v <- function(var) {
+
+  square = sum((var-mean(var))^2)
+  s_varience = square/(length(var)-1)
+  return (s_varience)
+  
+}
+
+
+data = c(6,6,6,7,8,9,2,2)
+
+res = sample_v(data)
+cat(res)
+
+
+
+
+
+```
+
+
+
